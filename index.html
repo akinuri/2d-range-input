@@ -22,7 +22,6 @@
             background-color: #efefef;
             border: 1px solid #b2b2b2;
             border-radius: 0.5rem;
-            box-sizing: border-box;
         }
         .range-2d .value-map-wrapper:hover {
             background-color: #E5E5E5;
@@ -80,16 +79,29 @@
     let map         = document.querySelector(".range-2d .value-map");
     let thumb       = document.querySelector(".range-2d .value-map .thumb");
     
-    let mapRect = map.getBoundingClientRect();
+    thumb.addEventListener("mousedown", startDragging);
+    window.addEventListener("mouseup", stopDragging);
     
-    window.addEventListener("mousemove", function (e) {
-        let x = e.clientX - mapRect.x;
-        let y = e.clientY - mapRect.y;
+    let mapOffsetX, mapOffsetY;
+    
+    function startDragging(e) {
+        e.preventDefault();
+        let mapRect = map.getBoundingClientRect();
+        mapOffsetX = mapRect.left;
+        mapOffsetY = mapRect.top;
+        window.addEventListener("mousemove", drag);
+    }
+    function stopDragging() {
+        window.removeEventListener("mousemove", drag);
+    }
+    function drag(e) {
+        let x = e.clientX - mapOffsetX;
+        let y = e.clientY - mapOffsetY;
         x = clamp(x, 0, 100);
         y = clamp(y, 0, 100);
         thumb.style.left = x + "px";
-        thumb.style.top = y + "px";
-    });
+        thumb.style.top  = y + "px";
+    }
     
     function clamp(number, min, max) {
         return Math.min(Math.max(number, min), max);
