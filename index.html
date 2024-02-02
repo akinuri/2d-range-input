@@ -13,9 +13,6 @@
             width: fit-content;
             /* border: 1px dashed silver; */
         }
-        .range-2d input[type=range] {
-            /* display: none; */
-        }
         .range-2d .value-map-wrapper {
             padding: 0.5rem;
             width: fit-content;
@@ -57,19 +54,22 @@
 </head>
 <body>
 
+<div style="margin-bottom: 1rem">
+    <input
+        id="range-x"
+        type="range"
+        min="0"
+        max="100"
+    />
+    <input
+        id="range-y"
+        type="range"
+        min="0"
+        max="100"
+    />
+</div>
+
 <div class="range-2d">
-    <input
-        type="range"
-        class="range-x"
-        min="0"
-        max="100"
-    />
-    <input
-        type="range"
-        class="range-y"
-        min="0"
-        max="100"
-    />
     <div class="value-map-wrapper">
         <div class="value-map">
             <div class="thumb"></div>
