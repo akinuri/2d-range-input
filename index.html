@@ -50,6 +50,9 @@
         .range-2d .value-map .thumb:hover {
             background-color: #005CC8;
         }
+        .range-2d .value-map .thumb:active {
+            background-color: #3793ff;
+        }
     </style>
 </head>
 <body>
@@ -82,6 +85,20 @@
     thumb.addEventListener("mousedown", startDragging);
     window.addEventListener("mouseup", stopDragging);
     
+    mapWrapper.addEventListener("mousedown", e => {
+        if (e.target == thumb) {
+            return;
+        }
+        let x = e.offsetX;
+        let y = e.offsetY;
+        if (e.target == mapWrapper) {
+            x -= 8;
+            y -= 8;
+        }
+        moveThumb(x, y);
+        startDragging(e);
+    });
+    
     let mapOffsetX, mapOffsetY;
     
     function startDragging(e) {
@@ -97,6 +114,9 @@
     function drag(e) {
         let x = e.clientX - mapOffsetX;
         let y = e.clientY - mapOffsetY;
+        moveThumb(x, y);
+    }
+    function moveThumb(x, y) {
         x = clamp(x, 0, 100);
         y = clamp(y, 0, 100);
         thumb.style.left = x + "px";
