@@ -15,8 +15,16 @@ function Range2D() {
         this.thumb.style[prop] = value;
     }
 
+    const resizeObserver = new ResizeObserver(entries => {
+        for (let entry of entries) {
+            this.updateThumbPos();
+        }
+    });
+    resizeObserver.observe(this.container);
+
     this.containerRect = null;
     this.thumbRect = null;
+    this.thumbPosRatios = [0, 0];
 
     this.thumb.addEventListener("mousedown", this.startDragging.bind(this));
     document.addEventListener("mouseup", this.stopDragging.bind(this));
@@ -83,20 +91,28 @@ Range2D.prototype = {
         this.moveThumb(x, y);
     },
 
-    moveThumb: function moveThumb(x, y) {
-        let width = 100;
-        let height = 100;
-        let minX = 0;
-        let minY = 0;
-        let maxX = width - this.thumbRect.width;
-        let maxY = height - this.thumbRect.height;
-        let halfThumb = this.thumbRect.width / 2;
-        x -= halfThumb;
-        y -= halfThumb;
-        x = Range2D.clamp(x, minX, maxX);
-        y = Range2D.clamp(y, minY, maxY);
+    moveThumb: function moveThumb(x, y, skipThumb = false) {
+        let maxX = this.containerRect.width - this.thumbRect.width;
+        let maxY = this.containerRect.height - this.thumbRect.height;
+        if (!skipThumb) {
+            let halfThumb = this.thumbRect.width / 2;
+            x -= halfThumb;
+            y -= halfThumb;
+        }
+        x = Range2D.clamp(x, 0, maxX);
+        y = Range2D.clamp(y, 0, maxY);
+        this.thumbPosRatios = [x / maxX, y / maxY];
         this.thumb.style.left = x + "px";
         this.thumb.style.top = y + "px";
+    },
+
+    updateThumbPos: function updateThumbPos() {
+        this.getRects();
+        let maxX = this.containerRect.width - this.thumbRect.width;
+        let maxY = this.containerRect.height - this.thumbRect.height;
+        let x = this.thumbPosRatios[0] * maxX;
+        let y = this.thumbPosRatios[1] * maxY;
+        this.moveThumb(x, y, true);
     },
 
 };
