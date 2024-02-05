@@ -22,6 +22,9 @@ function Range2D() {
     document.addEventListener("mouseup", this.stopDragging.bind(this));
 
     this.container.addEventListener("mousedown", function (e) {
+        if (e.button != 0) {
+            return;
+        }
         if (e.target == this.thumb) {
             return;
         }
@@ -54,6 +57,9 @@ Range2D.prototype = {
     },
 
     startDragging: function startDragging(e) {
+        if (e.button != 0) {
+            return;
+        }
         e.preventDefault();
         this.getRects();
         if (!this.dragBound) {
@@ -62,7 +68,10 @@ Range2D.prototype = {
         document.addEventListener("mousemove", this.dragBound);
     },
 
-    stopDragging: function stopDragging() {
+    stopDragging: function stopDragging(e) {
+        if (e.button != 0 && e.button != 2) {
+            return;
+        }
         document.removeEventListener("mousemove", this.dragBound);
         this.containerRect = null;
         this.thumbRect = null;
