@@ -65,54 +65,10 @@
     />
 </div>
 
-<div class="range-2d">
-    <div class="thumb"></div>
-</div>
-
+<script src="range-2d.js"></script>
 <script>
-    let range = document.querySelector(".range-2d");
-    let thumb = document.querySelector(".range-2d .thumb");
-    
-    thumb.addEventListener("mousedown", startDragging);
-    window.addEventListener("mouseup", stopDragging);
-    
-    range.addEventListener("mousedown", e => {
-        if (e.target == thumb) {
-            return;
-        }
-        let x = e.offsetX;
-        let y = e.offsetY;
-        moveThumb(x, y);
-        startDragging(e);
-    });
-    
-    let rangeOffsetX, rangeOffsetY;
-    
-    function startDragging(e) {
-        e.preventDefault();
-        let rangeRect = range.getBoundingClientRect();
-        rangeOffsetX = rangeRect.left;
-        rangeOffsetY = rangeRect.top;
-        window.addEventListener("mousemove", drag);
-    }
-    function stopDragging() {
-        window.removeEventListener("mousemove", drag);
-    }
-    function drag(e) {
-        let x = e.clientX - rangeOffsetX;
-        let y = e.clientY - rangeOffsetY;
-        moveThumb(x, y);
-    }
-    function moveThumb(x, y) {
-        x = clamp(x, 0, 100);
-        y = clamp(y, 0, 100);
-        thumb.style.left = x + "px";
-        thumb.style.top  = y + "px";
-    }
-    
-    function clamp(number, min, max) {
-        return Math.min(Math.max(number, min), max);
-    }
+    let range = new Range2D();
+    document.body.append(range.container);
 </script>
 
 </body>
