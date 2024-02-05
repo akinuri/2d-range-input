@@ -25,6 +25,7 @@ function Range2D() {
     this.containerRect = null;
     this.thumbRect = null;
     this.thumbPosRatios = [0, 0];
+    this.resizable = false;
 
     this.thumb.addEventListener("mousedown", this.startDragging.bind(this));
     document.addEventListener("mouseup", this.stopDragging.bind(this));
@@ -34,6 +35,9 @@ function Range2D() {
             return;
         }
         if (e.target == this.thumb) {
+            return;
+        }
+        if (this.resizable) {
             return;
         }
         this.getRects();
@@ -113,6 +117,18 @@ Range2D.prototype = {
         let x = this.thumbPosRatios[0] * maxX;
         let y = this.thumbPosRatios[1] * maxY;
         this.moveThumb(x, y, true);
+    },
+
+    makeResizable: function makeResizable() {
+        this.resizable = true;
+        this.container.style.overflow = "auto";
+        this.container.style.resize = "both";
+    },
+
+    makeNotResizable: function makeResizable() {
+        this.resizable = false;
+        this.container.style.overflow = "";
+        this.container.style.resize = "";
     },
 
 };
