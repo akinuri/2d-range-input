@@ -1,4 +1,4 @@
-function DragArea() {
+function DragArea(itemCount = 1) {
 
     this.element = document.createElement("div");
     this.element.classList.add("drag-area");
@@ -10,22 +10,28 @@ function DragArea() {
         this.element.style[prop] = DragArea.defaultStyle[prop];
     }
 
-    this.item = new DragItem(this);
-    this.element.append(this.item.element);
+    this.items = [];
+    
+    for (let index = 0; index < itemCount; index++) {
+        let item = new DragItem(this);
+        this.element.append(item.element);
+        this.items.push(item);
+    }
 
     const resizeObserver = new ResizeObserver(entries => {
         for (let entry of entries) {
-            this.item.updatePos();
+            this.items.forEach(item => item.updatePos());
         }
     });
     resizeObserver.observe(this.element);
     
-    this.element.addEventListener("mousedown", function (e) {
-        let isMoved = this.moveItemToClickedPos(e);
-        if (isMoved) {
-            this.item.startDragging(e);
-        }
-    }.bind(this));
+    // TODO: snap the closest item to the click
+    // this.element.addEventListener("mousedown", function (e) {
+    //     let isMoved = this.moveItemToClickedPos(e);
+    //     if (isMoved) {
+    //         this.item.startDragging(e);
+    //     }
+    // }.bind(this));
 }
 
 DragArea.defaultStyle = {
@@ -44,21 +50,21 @@ DragArea.prototype = {
         this.rect = rect;
     },
 
-    moveItemToClickedPos: function (e) {
-        if (e.button != DragAreaUtils.MOUSE_BUTTON_LEFT) {
-            return false;
-        }
-        if (e.target == this.item.element) {
-            return false;
-        }
-        if (this.resizable) {
-            return false;
-        }
-        this.updateRect();
-        this.item.updateRect();
-        this.item.move(e.offsetX, e.offsetY);
-        return true;
-    },
+    // moveItemToClickedPos: function (e) {
+    //     if (e.button != DragAreaUtils.MOUSE_BUTTON_LEFT) {
+    //         return false;
+    //     }
+    //     if (e.target == this.item.element) {
+    //         return false;
+    //     }
+    //     if (this.resizable) {
+    //         return false;
+    //     }
+    //     this.updateRect();
+    //     this.item.updateRect();
+    //     this.item.move(e.offsetX, e.offsetY);
+    //     return true;
+    // },
 
     makeResizable: function makeResizable() {
         this.resizable = true;
