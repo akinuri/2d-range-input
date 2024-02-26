@@ -88,4 +88,14 @@ DragItem.prototype = {
         this.move(x, y, true);
     },
 
+    getPos: function () {
+        let computedStyle = getComputedStyle(this.element);
+        let x = parseFloat(computedStyle.left);
+        let y = parseFloat(computedStyle.top);
+        let halfWidth = this.rect.width / 2;
+        x += halfWidth;
+        y += halfWidth;
+        return {x, y};
+    },
+
 };
