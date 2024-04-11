@@ -6,7 +6,7 @@ function DragArea(width = 128, height = 128, itemCount = 1) {
     this.element = document.createElement("div");
     this.element.classList.add("drag-area");
 
-    this.rect = null;
+    this.elRect = null;
     this.resizable = false;
 
     for (const prop in DragArea.defaultStyle) {
@@ -55,11 +55,11 @@ DragArea.defaultStyle = {
 
 DragArea.prototype = {
 
-    updateRect: function (rect) {
+    updateElRect: function (rect) {
         rect = typeof rect == "undefined"
             ? this.element.getBoundingClientRect()
             : rect;
-        this.rect = rect;
+        this.elRect = rect;
     },
 
     getClosestItem: function (e) {
@@ -79,8 +79,8 @@ DragArea.prototype = {
     },
 
     moveItemToClickedPos: function (item, e) {
-        this.updateRect();
-        item.updateRect();
+        this.updateElRect();
+        item.updateElRect();
         item.move(e.offsetX, e.offsetY);
     },
 
