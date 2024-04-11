@@ -1,9 +1,6 @@
-function DragItem(area, width, height, x, y) {
+function DragItem(area) {
 
     this.area = area;
-
-    this.width = width || parseInt(DragItem.defaultStyle.width);
-    this.height = height || parseInt(DragItem.defaultStyle.height);
 
     this.element = document.createElement("div");
     this.element.classList.add("drag-item");
@@ -68,8 +65,8 @@ DragItem.prototype = {
     },
 
     move: function (x, y, skip = false) {
-        let maxX = this.area.width - this.width;
-        let maxY = this.area.height - this.height;
+        let maxX = this.area.elRect.width - this.elRect.width;
+        let maxY = this.area.elRect.height - this.elRect.height;
         if (!skip) {
             let halfWidth = this.elRect.width / 2;
             x -= halfWidth;
@@ -85,8 +82,8 @@ DragItem.prototype = {
     updatePos: function () {
         this.updateElRect();
         this.area.updateElRect();
-        let maxX = this.area.width - this.width;
-        let maxY = this.area.height - this.height;
+        let maxX = this.area.elRect.width - this.elRect.width;
+        let maxY = this.area.elRect.height - this.elRect.height;
         let x = this.posRatios[0] * maxX;
         let y = this.posRatios[1] * maxY;
         this.move(x, y, true);

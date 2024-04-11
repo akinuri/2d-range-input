@@ -1,7 +1,4 @@
-function DragArea(width = 128, height = 128, itemCount = 1) {
-
-    this.width = width || parseInt(DragArea.defaultStyle.width);
-    this.height = height || parseInt(DragArea.defaultStyle.height);
+function DragArea(itemCount = 1) {
 
     this.element = document.createElement("div");
     this.element.classList.add("drag-area");
@@ -12,8 +9,6 @@ function DragArea(width = 128, height = 128, itemCount = 1) {
     for (const prop in DragArea.defaultStyle) {
         this.element.style[prop] = DragArea.defaultStyle[prop];
     }
-    this.element.style.width = this.width + "px";
-    this.element.style.height = this.height + "px";
 
     this.items = [];
 
