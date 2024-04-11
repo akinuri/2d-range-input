@@ -76,7 +76,7 @@ DragArea.prototype = {
     moveItemToClickedPos: function (item, e) {
         this.updateElRect();
         item.updateElRect();
-        item.move(e.offsetX, e.offsetY);
+        item.moveTo(e.offsetX, e.offsetY);
     },
 
     makeResizable: function makeResizable() {

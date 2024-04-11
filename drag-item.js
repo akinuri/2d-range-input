@@ -61,10 +61,10 @@ DragItem.prototype = {
     drag: function drag(e) {
         let x = e.clientX - this.area.elRect.left;
         let y = e.clientY - this.area.elRect.top;
-        this.move(x, y);
+        this.moveTo(x, y);
     },
 
-    move: function (x, y, skip = false) {
+    moveTo: function (x, y, skip = false) {
         let maxX = this.area.elRect.width - this.elRect.width;
         let maxY = this.area.elRect.height - this.elRect.height;
         if (!skip) {
@@ -86,7 +86,7 @@ DragItem.prototype = {
         let maxY = this.area.elRect.height - this.elRect.height;
         let x = this.posRatios[0] * maxX;
         let y = this.posRatios[1] * maxY;
-        this.move(x, y, true);
+        this.moveTo(x, y, true);
     },
 
     getPos: function () {
