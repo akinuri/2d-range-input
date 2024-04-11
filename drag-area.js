@@ -1,4 +1,7 @@
-function DragArea(itemCount = 1) {
+function DragArea(width = 128, height = 128, itemCount = 1) {
+
+    this.width = width || parseInt(DragArea.defaultStyle.width);
+    this.height = height || parseInt(DragArea.defaultStyle.height);
 
     this.element = document.createElement("div");
     this.element.classList.add("drag-area");
@@ -9,9 +12,11 @@ function DragArea(itemCount = 1) {
     for (const prop in DragArea.defaultStyle) {
         this.element.style[prop] = DragArea.defaultStyle[prop];
     }
+    this.element.style.width = this.width + "px";
+    this.element.style.height = this.height + "px";
 
     this.items = [];
-    
+
     for (let index = 0; index < itemCount; index++) {
         let item = new DragItem(this);
         this.element.append(item.element);
@@ -24,7 +29,7 @@ function DragArea(itemCount = 1) {
         }
     });
     resizeObserver.observe(this.element);
-    
+
     this.element.addEventListener("mousedown", function (e) {
         if (e.button != DragAreaUtils.MOUSE_BUTTON_LEFT) {
             return false;
@@ -56,7 +61,7 @@ DragArea.prototype = {
             : rect;
         this.rect = rect;
     },
-    
+
     getClosestItem: function (e) {
         let distances = new Map();
         for (const item of this.items) {
