@@ -20,7 +20,7 @@ function DragArea(itemCount = 1) {
 
     const resizeObserver = new ResizeObserver(entries => {
         for (let entry of entries) {
-            this.items.forEach(item => item.updatePos());
+            this.items.forEach(item => item.updatePosFromLog());
         }
     });
     resizeObserver.observe(this.element);
@@ -60,23 +60,20 @@ DragArea.prototype = {
     getClosestItem: function (e) {
         let distances = new Map();
         for (const item of this.items) {
-            let itemPos = item.getPos();
+            let itemPos = item.getPos(true);
             let distance = DragAreaUtils.calcDist(
                 e.offsetX, e.offsetY,
                 itemPos.x, itemPos.y,
             );
             distances.set(item, distance);
         }
-        const [closestItem, minDist] = Array.from(distances).reduce((acc, curr) => {
-            return curr[1] < acc[1] ? curr : acc;
-        });
-        return closestItem;
+        return DragAreaUtils.getMinValueKey(distances);
     },
 
     moveItemToClickedPos: function (item, e) {
         this.updateElRect();
         item.updateElRect();
-        item.moveTo(e.offsetX, e.offsetY);
+        item.moveTo(e.offsetX, e.offsetY, true);
     },
 
     makeResizable: function makeResizable() {

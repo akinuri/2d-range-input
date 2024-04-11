@@ -61,42 +61,51 @@ DragItem.prototype = {
     drag: function drag(e) {
         let x = e.clientX - this.area.elRect.left;
         let y = e.clientY - this.area.elRect.top;
-        this.moveTo(x, y);
+        this.moveTo(x, y, true);
     },
 
-    moveTo: function (x, y, skip = false) {
+    moveTo: function (x, y, refCenter = false) {
+        ({ x, y } = this.calcPos(x, y, refCenter));
+        this.element.style.left = x + "px";
+        this.element.style.top = y + "px";
+    },
+
+    calcPos: function (x, y, refCenter = false) {
         let maxX = this.area.elRect.width - this.elRect.width;
         let maxY = this.area.elRect.height - this.elRect.height;
-        if (!skip) {
+        if (refCenter) {
             let halfWidth = this.elRect.width / 2;
             x -= halfWidth;
             y -= halfWidth;
         }
         x = DragAreaUtils.clamp(x, 0, maxX);
         y = DragAreaUtils.clamp(y, 0, maxY);
-        this.posRatios = [x / maxX, y / maxY];
-        this.element.style.left = (x || 0) + "px";
-        this.element.style.top = (y || 0) + "px";
+        logPos: {
+            this.posRatios = [x / maxX, y / maxY];
+        }
+        return { x, y };
     },
 
-    updatePos: function () {
+    updatePosFromLog: function () {
         this.updateElRect();
         this.area.updateElRect();
         let maxX = this.area.elRect.width - this.elRect.width;
         let maxY = this.area.elRect.height - this.elRect.height;
         let x = this.posRatios[0] * maxX;
         let y = this.posRatios[1] * maxY;
-        this.moveTo(x, y, true);
+        this.moveTo(x, y);
     },
 
-    getPos: function () {
+    getPos: function (refCenter = false) {
         let computedStyle = getComputedStyle(this.element);
         let x = parseFloat(computedStyle.left);
         let y = parseFloat(computedStyle.top);
         this.updateElRect();
-        let halfWidth = this.elRect.width / 2;
-        x += halfWidth;
-        y += halfWidth;
+        if (refCenter) {
+            let halfWidth = this.elRect.width / 2;
+            x += halfWidth;
+            y += halfWidth;
+        }
         return { x, y };
     },
 
